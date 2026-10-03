@@ -1,0 +1,143 @@
+:root {
+  --wine: #7b2d3a;
+}
+
+body {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.brand {
+  font-weight: 700;
+  color: var(--wine);
+}
+
+form.inline {
+  margin: 0;
+}
+
+button.small {
+  padding: 0.25rem 0.75rem;
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.narrow {
+  max-width: 28rem;
+  margin-inline: auto;
+}
+
+.muted {
+  color: var(--pico-muted-color);
+}
+
+.flash {
+  padding: 0.75rem 1rem;
+  border-left: 4px solid var(--wine);
+  background: var(--pico-card-background-color);
+}
+
+.error {
+  color: var(--pico-del-color);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tag {
+  padding: 0.15rem 0.6rem;
+  border: 1px solid var(--pico-muted-border-color);
+  border-radius: 1rem;
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+
+.tag.active {
+  background: var(--wine);
+  border-color: var(--wine);
+  color: #fff;
+}
+
+.recipe-list {
+  list-style: none;
+  padding: 0;
+}
+
+.recipe-list li {
+  list-style: none;
+  border-bottom: 1px solid var(--pico-muted-border-color);
+}
+
+.recipe-list a {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.75rem 0;
+  text-decoration: none;
+}
+
+.recipe-list img {
+  width: 4rem;
+  height: 4rem;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+
+.recipe-list span {
+  display: flex;
+  flex-direction: column;
+}
+
+.recipe .meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  color: var(--pico-muted-color);
+}
+
+.recipe .hero {
+  width: 100%;
+  max-height: 24rem;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.ingredients {
+  padding-left: 0;
+}
+
+.ingredients li {
+  list-style: none;
+}
+
+.ingredients label:has(input:checked) {
+  text-decoration: line-through;
+  color: var(--pico-muted-color);
+}
+
+.steps li {
+  margin-bottom: 0.75rem;
+}
+
+/* Kitchen mode: large text, screen kept awake (see app.js). */
+.kitchen .recipe-body {
+  font-size: 1.35rem;
+  line-height: 1.6;
+}
+
+.kitchen [data-kitchen-toggle] {
+  background: var(--wine);
+  color: #fff;
+}
+
+.recipe footer {
+  display: flex;
+  gap: 1rem;
+}
+
+.recipe-form textarea {
+  font-family: inherit;
+}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Ta bort {{ recipe.title }} · Mat & Vin{% endblock %}
+{% block content %}
+<article class="narrow">
+  <h1>Ta bort recept?</h1>
+  <p>”{{ recipe.title }}” tas bort för gott.</p>
+  <form method="post">
+    {% csrf_token %}
+    <div class="grid">
+      <button type="submit" class="contrast">Ta bort</button>
+      <a href="{{ recipe.get_absolute_url }}" role="button" class="secondary outline">Avbryt</a>
+    </div>
+  </form>
+</article>
+{% endblock %}

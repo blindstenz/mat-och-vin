@@ -1,0 +1,43 @@
+{% load static %}<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#7b2d3a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Mat & Vin">
+  <title>{% block title %}Mat & Vin{% endblock %}</title>
+  <link rel="manifest" href="{% url 'manifest' %}">
+  <link rel="apple-touch-icon" href="{% static 'icons/apple-touch-icon.png' %}">
+  <link rel="icon" href="{% static 'icons/icon-192.png' %}">
+  <link rel="stylesheet" href="{% static 'vendor/pico.red.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+  <script src="{% static 'vendor/htmx.min.js' %}" defer></script>
+  <script src="{% static 'js/app.js' %}" defer></script>
+</head>
+<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+  <header class="container">
+    <nav>
+      <ul><li><a href="{% url 'home' %}" class="brand">Mat &amp; Vin</a></li></ul>
+      {% if user.is_authenticated %}
+      <ul>
+        <li><a href="{% url 'recipes:list' %}">Recept</a></li>
+        <li><a href="{% url 'recipes:create' %}">Nytt</a></li>
+        <li>
+          <form method="post" action="{% url 'logout' %}" class="inline">
+            {% csrf_token %}<button type="submit" class="outline secondary small">Logga ut</button>
+          </form>
+        </li>
+      </ul>
+      {% endif %}
+    </nav>
+  </header>
+  <main class="container">
+    {% for message in messages %}
+    <p class="flash" role="status">{{ message }}</p>
+    {% endfor %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

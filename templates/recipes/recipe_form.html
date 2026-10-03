@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}{% if recipe %}Ändra {{ recipe.title }}{% else %}Nytt recept{% endif %} · Mat & Vin{% endblock %}
+{% block content %}
+<h1>{% if recipe %}Ändra recept{% else %}Nytt recept{% endif %}</h1>
+<form method="post" enctype="multipart/form-data" class="recipe-form">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  {% for field in form %}
+  <div class="field">
+    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+    {{ field }}
+    {% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}
+    {% for error in field.errors %}<small class="error">{{ error }}</small>{% endfor %}
+  </div>
+  {% endfor %}
+  <div class="grid">
+    <button type="submit">Spara</button>
+    <a href="{% if recipe %}{{ recipe.get_absolute_url }}{% else %}{% url 'recipes:list' %}{% endif %}" role="button" class="secondary outline">Avbryt</a>
+  </div>
+</form>
+{% endblock %}
