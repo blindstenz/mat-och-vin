@@ -141,3 +141,66 @@ button.small {
 .recipe-form textarea {
   font-family: inherit;
 }
+
+.small {
+  font-size: 0.875rem;
+}
+
+.pairings {
+  padding: 0;
+}
+
+.pairings li.pairing {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--pico-muted-border-color);
+}
+
+.pairing small {
+  display: block;
+}
+
+.pairing p {
+  margin: 0.35rem 0 0;
+}
+
+.thumbs {
+  display: flex;
+  gap: 0.25rem;
+  margin: 0;
+  align-items: flex-start;
+}
+
+.thumb {
+  width: auto;
+  margin: 0;
+  padding: 0.2rem 0.45rem;
+  background: transparent;
+  border: 1px solid var(--pico-muted-border-color);
+  filter: grayscale(1);
+  opacity: 0.6;
+}
+
+.thumb.on {
+  filter: none;
+  opacity: 1;
+  border-color: var(--wine);
+}
+
+.htmx-indicator {
+  display: none;
+}
+
+.htmx-request .htmx-indicator,
+.htmx-request.htmx-indicator {
+  display: block;
+}
+
+.profile-form fieldset label {
+  display: inline-flex;
+  gap: 0.35rem;
+  margin-right: 1rem;
+}

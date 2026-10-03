@@ -1,0 +1,34 @@
+<section class="wine" id="vin">
+  <h2>Vin till</h2>
+  {% if notice %}<p class="flash" role="status">{{ notice }}</p>{% endif %}
+
+  {% if pairings %}
+  <ul class="pairings">
+    {% for pairing in pairings %}{% include "wine/_pairing.html" %}{% endfor %}
+  </ul>
+  {% if profile %}
+  <p class="muted small">
+    Bedömt som {{ profile.get_main_component_display|lower }}{% if profile.cooking_method %}, {{ profile.get_cooking_method_display|lower }}{% endif %}{% if profile.sauce != "none" %}, sås: {{ profile.get_sauce_display|lower }}{% endif %}, {{ profile.get_weight_display|lower }} rätt{% if profile.flavours %}, {{ profile.flavour_labels|join:", "|lower }}{% endif %}.
+    <a href="{% url 'wine:profile' recipe.pk %}">Stämmer det inte?</a>
+  </p>
+  {% endif %}
+  <button type="button" class="outline secondary small"
+          hx-post="{% url 'wine:suggest' recipe.pk %}" hx-target="#vin" hx-swap="outerHTML"
+          hx-indicator="#vin-loading">Föreslå igen</button>
+
+  {% elif claude_enabled %}
+  <div hx-post="{% url 'wine:suggest' recipe.pk %}" hx-trigger="load" hx-target="#vin" hx-swap="outerHTML"
+       hx-indicator="#vin-loading">
+    <p class="muted">Claude läser receptet och väljer vin…</p>
+  </div>
+
+  {% elif profile %}
+  <button type="button" hx-post="{% url 'wine:suggest' recipe.pk %}" hx-target="#vin" hx-swap="outerHTML"
+          hx-indicator="#vin-loading">Föreslå vin</button>
+
+  {% else %}
+  <p>Beskriv rätten med några klick så föreslår appen vin.</p>
+  <a href="{% url 'wine:profile' recipe.pk %}" role="button">Beskriv rätten</a>
+  {% endif %}
+  <p id="vin-loading" class="htmx-indicator muted" aria-busy="true">Väljer vin…</p>
+</section>

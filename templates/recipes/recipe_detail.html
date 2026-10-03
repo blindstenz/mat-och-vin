@@ -33,10 +33,7 @@
     </section>
   </div>
 
-  <section class="wine">
-    <h2>Vin till</h2>
-    <p class="muted">Vinförslag kommer i nästa version.</p>
-  </section>
+  {% include "wine/_wine_section.html" %}
 
   {% if recipe.notes %}<section><h2>Anteckningar</h2><p>{{ recipe.notes|linebreaksbr }}</p></section>{% endif %}
   {% if recipe.source %}

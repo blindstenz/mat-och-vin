@@ -13,6 +13,7 @@ urlpatterns = [
     path("konto/registrera/", core_views.signup, name="signup"),
     path("konto/", include("django.contrib.auth.urls")),
     path("recept/", include("recipes.urls")),
+    path("vin/", include("wine.urls")),
     path("admin/", admin.site.urls),
 ]
 
