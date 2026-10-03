@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block title %}Recept · Mat & Vin{% endblock %}
 {% block content %}
-<hgroup>
+<header class="page-head">
+  <p class="kicker">Le carnet</p>
   <h1>Mina recept</h1>
-  <p><a href="{% url 'recipes:create' %}">+ Lägg till recept</a></p>
-</hgroup>
+</header>
 
 <form method="get" role="search">
   <input type="search" name="q" value="{{ query }}" placeholder="Sök på titel, ingrediens eller tagg"

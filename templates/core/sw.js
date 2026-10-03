@@ -1,7 +1,7 @@
 // Mat & Vin service worker.
 // Pages: network first, falling back to the last cached copy, so recipes you
 // have opened stay readable offline in the kitchen. Static files: cache first.
-const CACHE = "mat-och-vin-v1";
+const CACHE = "mat-och-vin-v2";
 const PRECACHE = [{% for url in precache %}"{{ url|escapejs }}"{% if not forloop.last %}, {% endif %}{% endfor %}];
 const OFFLINE_URL = "{% url 'offline' %}";
 

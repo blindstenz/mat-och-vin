@@ -1,20 +1,20 @@
 {% if recipes %}
-<ul class="recipe-list">
+<ul class="recipe-cards">
   {% for recipe in recipes %}
   <li>
-    <a href="{{ recipe.get_absolute_url }}">
-      {% if recipe.photo %}<img src="{{ recipe.photo.url }}" alt="" loading="lazy">{% endif %}
-      <span>
+    <a href="{{ recipe.get_absolute_url }}" class="recipe-card">
+      {% if recipe.photo %}<img src="{{ recipe.photo.url }}" alt="" loading="lazy">
+      {% else %}<span class="placeholder" aria-hidden="true">{{ recipe.title|first|upper }}</span>{% endif %}
+      <span class="body">
         <strong>{{ recipe.title }}</strong>
-        {% if recipe.total_minutes %}<small>{{ recipe.total_minutes }} min</small>{% endif %}
-        {% if recipe.tags.all %}<small class="muted">{{ recipe.tags.all|join:", " }}</small>{% endif %}
+        <small>{% if recipe.total_minutes %}{{ recipe.total_minutes }} min{% endif %}{% if recipe.total_minutes and recipe.tags.all %} · {% endif %}{{ recipe.tags.all|join:", " }}</small>
       </span>
     </a>
   </li>
   {% endfor %}
 </ul>
 {% elif query or active_tag %}
-<p>Inga recept matchade sökningen.</p>
+<p class="empty">Inga recept matchade sökningen.</p>
 {% else %}
-<p>Du har inga recept än. <a href="{% url 'recipes:create' %}">Lägg till ditt första.</a></p>
+<p class="empty">Du har inga recept än. <a href="{% url 'recipes:create' %}">Lägg till ditt första.</a></p>
 {% endif %}

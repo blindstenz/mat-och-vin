@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#7b2d3a">
+  <meta name="theme-color" content="#f5efe4" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1c1a18" media="(prefers-color-scheme: dark)">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Mat & Vin">
@@ -11,27 +12,27 @@
   <link rel="manifest" href="{% url 'manifest' %}">
   <link rel="apple-touch-icon" href="{% static 'icons/apple-touch-icon.png' %}">
   <link rel="icon" href="{% static 'icons/icon-192.png' %}">
+  <link rel="preload" href="{% static 'fonts/cormorant-garamond-latin.woff2' %}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{% static 'fonts/inter-latin.woff2' %}" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="{% static 'vendor/pico.red.min.css' %}">
   <link rel="stylesheet" href="{% static 'css/app.css' %}">
   <script src="{% static 'vendor/htmx.min.js' %}" defer></script>
   <script src="{% static 'js/app.js' %}" defer></script>
 </head>
-<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
-  <header class="container">
-    <nav>
-      <ul><li><a href="{% url 'home' %}" class="brand">Mat &amp; Vin</a></li></ul>
+<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'{% if user.is_authenticated %} class="has-tabbar"{% endif %}>
+  <header class="site-header">
+    <div class="container">
+      <a href="{% url 'home' %}" class="brand">Mat &amp; Vin<small>Cuisine · Cave</small></a>
       {% if user.is_authenticated %}
-      <ul>
-        <li><a href="{% url 'recipes:list' %}">Recept</a></li>
-        <li><a href="{% url 'recipes:create' %}">Nytt</a></li>
-        <li>
-          <form method="post" action="{% url 'logout' %}" class="inline">
-            {% csrf_token %}<button type="submit" class="outline secondary small">Logga ut</button>
-          </form>
-        </li>
-      </ul>
+      <nav class="top-nav" aria-label="Huvudmeny">
+        <a href="{% url 'recipes:list' %}"{% if request.resolver_match.url_name == 'list' %} aria-current="page"{% endif %}>Recept</a>
+        <a href="{% url 'recipes:create' %}"{% if request.resolver_match.url_name == 'create' %} aria-current="page"{% endif %}>Nytt recept</a>
+        <form method="post" action="{% url 'logout' %}" class="inline">
+          {% csrf_token %}<button type="submit" class="link">Logga ut</button>
+        </form>
+      </nav>
       {% endif %}
-    </nav>
+    </div>
   </header>
   <main class="container">
     {% for message in messages %}
@@ -39,5 +40,21 @@
     {% endfor %}
     {% block content %}{% endblock %}
   </main>
+  {% if user.is_authenticated %}
+  <nav class="tabbar" aria-label="Huvudmeny">
+    <a href="{% url 'recipes:list' %}"{% if request.resolver_match.url_name == 'list' %} aria-current="page"{% endif %}>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/></svg>Recept
+    </a>
+    <a href="{% url 'recipes:create' %}"{% if request.resolver_match.url_name == 'create' %} aria-current="page"{% endif %}>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v8M8 12h8"/></svg>Nytt
+    </a>
+    <form method="post" action="{% url 'logout' %}">
+      {% csrf_token %}
+      <button type="submit">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-4"/><path d="M10 8l-4 4 4 4M6 12h9"/></svg>Logga ut
+      </button>
+    </form>
+  </nav>
+  {% endif %}
 </body>
 </html>
