@@ -3,10 +3,11 @@ import tempfile
 
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.test import TestCase, override_settings
+from django.test import SimpleTestCase, TestCase, override_settings
 from django.urls import reverse
 
 from .models import Recipe, Tag
+from .templatetags.recipe_extras import split_quantity
 
 # 1x1 transparent GIF, enough for ImageField validation.
 TINY_GIF = (
@@ -25,6 +26,21 @@ class RecipeModelTests(TestCase):
         self.assertEqual(Recipe(prep_minutes=10, cook_minutes=20).total_minutes, 30)
         self.assertEqual(Recipe(cook_minutes=20).total_minutes, 20)
         self.assertIsNone(Recipe().total_minutes)
+
+
+class SplitQuantityTests(SimpleTestCase):
+    def test_amount_and_unit_are_split_off(self):
+        self.assertEqual(split_quantity("1,5 kg lammstek"), ("1,5 kg", "lammstek"))
+        self.assertEqual(split_quantity("2 kvistar rosmarin"), ("2 kvistar", "rosmarin"))
+        self.assertEqual(split_quantity("½ tsk salt"), ("½ tsk", "salt"))
+        self.assertEqual(split_quantity("2-3 st ägg"), ("2-3 st", "ägg"))
+
+    def test_amount_without_unit(self):
+        self.assertEqual(split_quantity("4 vitlöksklyftor"), ("4", "vitlöksklyftor"))
+        self.assertEqual(split_quantity("4 gurkor"), ("4", "gurkor"))
+
+    def test_line_without_amount_is_kept_whole(self):
+        self.assertEqual(split_quantity("salt och peppar"), ("", "salt och peppar"))
 
 
 class RecipeViewTests(TestCase):
