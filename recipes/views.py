@@ -2,10 +2,16 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.decorators.http import require_POST
+
+from wine import ai as wine_ai
+from wine import service as wine_service
+from wine.models import RecipeProfile
 
 from .forms import RecipeForm
 from .models import Recipe, Tag
+
+# Edits to these fields change the dish, so its wine suggestions are redone.
+WINE_RELEVANT_FIELDS = {"title", "description", "ingredients", "steps"}
 
 
 def _own_recipes(request):
@@ -43,7 +49,13 @@ def recipe_list(request):
 @login_required
 def recipe_detail(request, pk):
     recipe = get_object_or_404(_own_recipes(request).prefetch_related("tags"), pk=pk)
-    return render(request, "recipes/recipe_detail.html", {"recipe": recipe})
+    context = {
+        "recipe": recipe,
+        "pairings": recipe.pairings.select_related("style"),
+        "profile": RecipeProfile.objects.filter(recipe=recipe).first(),
+        "claude_enabled": wine_ai.is_configured(),
+    }
+    return render(request, "recipes/recipe_detail.html", context)
 
 
 @login_required
@@ -65,6 +77,8 @@ def recipe_edit(request, pk):
     form = RecipeForm(request.POST or None, request.FILES or None, instance=recipe)
     if request.method == "POST" and form.is_valid():
         form.save()
+        if WINE_RELEVANT_FIELDS & set(form.changed_data):
+            wine_service.clear_stale(recipe)
         messages.success(request, "Ändringarna sparades.")
         return redirect(recipe)
     return render(request, "recipes/recipe_form.html", {"form": form, "recipe": recipe})

@@ -1,0 +1,15 @@
+<li class="pairing" id="pairing-{{ pairing.pk }}">
+  <div>
+    <strong>{{ pairing.style.name }}</strong>
+    <small class="muted">{{ pairing.style.get_colour_display }} · {{ pairing.style.grapes }}{% if pairing.style.regions %} · {{ pairing.style.regions }}{% endif %}</small>
+    {% if pairing.reason %}<p>{{ pairing.reason }}</p>{% endif %}
+  </div>
+  <form class="thumbs" method="post" action="{% url 'wine:rate' pairing.pk %}"
+        hx-post="{% url 'wine:rate' pairing.pk %}" hx-target="#pairing-{{ pairing.pk }}" hx-swap="outerHTML">
+    {% csrf_token %}
+    <button type="submit" name="value" value="up" class="thumb{% if pairing.rating > 0 %} on{% endif %}"
+            aria-pressed="{% if pairing.rating > 0 %}true{% else %}false{% endif %}" aria-label="Bra förslag">👍</button>
+    <button type="submit" name="value" value="down" class="thumb{% if pairing.rating < 0 %} on{% endif %}"
+            aria-pressed="{% if pairing.rating < 0 %}true{% else %}false{% endif %}" aria-label="Dåligt förslag">👎</button>
+  </form>
+</li>

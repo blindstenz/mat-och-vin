@@ -34,6 +34,11 @@ CSRF_TRUSTED_ORIGINS = env_list("DJANGO_CSRF_TRUSTED_ORIGINS")
 # with `manage.py createsuperuser` or in the admin.
 ALLOW_SIGNUP = env_bool("ALLOW_SIGNUP", False)
 
+# Wine suggestions use the Claude API when a key is set; otherwise the
+# built-in pairing rules are used on their own.
+ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
+CLAUDE_MODEL = os.environ.get("CLAUDE_MODEL", "claude-opus-5-5")
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -44,6 +49,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "core",
     "recipes",
+    "wine",
 ]
 
 MIDDLEWARE = [

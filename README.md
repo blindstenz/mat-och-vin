@@ -34,10 +34,21 @@ python manage.py test
 | `DATABASE_URL` | SQLite i projektmappen | T.ex. `postgres://...` |
 | `DJANGO_MEDIA_ROOT` | `./media` | Var uppladdade bilder sparas |
 | `ALLOW_SIGNUP` | `0` | `1` öppnar `/konto/registrera/` |
+| `ANTHROPIC_API_KEY` | | Nyckel från console.anthropic.com. Utan nyckel används bara de inbyggda reglerna |
+| `CLAUDE_MODEL` | `claude-opus-5-5` | Claude-modell för vinförslag |
 
 ## Struktur
 
 - `config/` inställningar och URL:er
 - `core/` start, inloggning, PWA (manifest, service worker, offlinesida)
 - `recipes/` recept, taggar, sök
+- `wine/` vinstilar, receptprofil, pairingregler (`rules.py`) och Claude (`ai.py`)
+
+## Vinförslag
+
+1. Claude läser receptet och fyller i en profil: huvudingrediens, tillagning, sås, tyngd och smaker. Utan API-nyckel fyller du i den själv ("Beskriv rätten").
+2. Reglerna i `wine/rules.py` poängsätter alla vinstilar mot profilen och dina tidigare tumme upp/ner.
+3. Claude väljer de tre bästa bland reglernas åtta toppkandidater och motiverar dem.
+
+Vinstilarna finns i `wine/styles_data.py`. Efter ändringar där: `python manage.py sync_wine_styles`.
 - `templates/`, `static/` HTML, CSS, JS (HTMX och Pico CSS ligger under `static/vendor/`)
