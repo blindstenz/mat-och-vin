@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Ingen anslutning · Mat & Vin{% endblock %}
+{% block content %}
+<article>
+  <h1>Ingen anslutning</h1>
+  <p>Den här sidan finns inte sparad i telefonen. Recept du redan har öppnat går att läsa utan nät.</p>
+  <a href="{% url 'recipes:list' %}" role="button">Till receptlistan</a>
+</article>
+{% endblock %}

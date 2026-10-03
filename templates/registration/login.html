@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Logga in · Mat & Vin{% endblock %}
+{% block content %}
+<article class="narrow">
+  <h1>Logga in</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_div }}
+    <input type="hidden" name="next" value="{{ next }}">
+    <button type="submit">Logga in</button>
+  </form>
+  {% if ALLOW_SIGNUP %}<p><a href="{% url 'signup' %}">Skapa konto</a></p>{% endif %}
+</article>
+{% endblock %}

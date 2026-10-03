@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Recept · Mat & Vin{% endblock %}
+{% block content %}
+<hgroup>
+  <h1>Mina recept</h1>
+  <p><a href="{% url 'recipes:create' %}">+ Lägg till recept</a></p>
+</hgroup>
+
+<form method="get" role="search">
+  <input type="search" name="q" value="{{ query }}" placeholder="Sök på titel, ingrediens eller tagg"
+         aria-label="Sök recept"
+         hx-get="{% url 'recipes:list' %}" hx-trigger="input changed delay:300ms, search"
+         hx-target="#results" hx-include="closest form" hx-push-url="true">
+  {% if active_tag %}<input type="hidden" name="tagg" value="{{ active_tag }}">{% endif %}
+</form>
+
+{% if tags %}
+<p class="tags">
+  <a href="{% url 'recipes:list' %}{% if query %}?q={{ query|urlencode }}{% endif %}"
+     class="tag{% if not active_tag %} active{% endif %}">Alla</a>
+  {% for tag in tags %}
+  <a href="?tagg={{ tag.name|urlencode }}{% if query %}&q={{ query|urlencode }}{% endif %}"
+     class="tag{% if tag.name == active_tag %} active{% endif %}">{{ tag.name }}</a>
+  {% endfor %}
+</p>
+{% endif %}
+
+<div id="results">{% include "recipes/_recipe_results.html" %}</div>
+{% endblock %}

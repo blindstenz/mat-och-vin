@@ -1,0 +1,20 @@
+{% if recipes %}
+<ul class="recipe-list">
+  {% for recipe in recipes %}
+  <li>
+    <a href="{{ recipe.get_absolute_url }}">
+      {% if recipe.photo %}<img src="{{ recipe.photo.url }}" alt="" loading="lazy">{% endif %}
+      <span>
+        <strong>{{ recipe.title }}</strong>
+        {% if recipe.total_minutes %}<small>{{ recipe.total_minutes }} min</small>{% endif %}
+        {% if recipe.tags.all %}<small class="muted">{{ recipe.tags.all|join:", " }}</small>{% endif %}
+      </span>
+    </a>
+  </li>
+  {% endfor %}
+</ul>
+{% elif query or active_tag %}
+<p>Inga recept matchade sökningen.</p>
+{% else %}
+<p>Du har inga recept än. <a href="{% url 'recipes:create' %}">Lägg till ditt första.</a></p>
+{% endif %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}{{ recipe.title }} · Mat & Vin{% endblock %}
+{% block content %}
+<article class="recipe" id="recipe">
+  <header>
+    <h1>{{ recipe.title }}</h1>
+    {% if recipe.description %}<p>{{ recipe.description }}</p>{% endif %}
+    <p class="meta">
+      {% if recipe.servings %}<span>{{ recipe.servings }} portioner</span>{% endif %}
+      {% if recipe.prep_minutes %}<span>Förberedelse {{ recipe.prep_minutes }} min</span>{% endif %}
+      {% if recipe.cook_minutes %}<span>Tillagning {{ recipe.cook_minutes }} min</span>{% endif %}
+    </p>
+    {% if recipe.tags.all %}
+    <p class="tags">{% for tag in recipe.tags.all %}<a class="tag" href="{% url 'recipes:list' %}?tagg={{ tag.name|urlencode }}">{{ tag.name }}</a>{% endfor %}</p>
+    {% endif %}
+    <button type="button" class="outline" data-kitchen-toggle aria-pressed="false">Köksläge</button>
+  </header>
+
+  {% if recipe.photo %}<img src="{{ recipe.photo.url }}" alt="{{ recipe.title }}" class="hero">{% endif %}
+
+  <div class="grid recipe-body">
+    <section>
+      <h2>Ingredienser</h2>
+      {% if recipe.ingredient_list %}
+      <ul class="ingredients">{% for line in recipe.ingredient_list %}<li><label><input type="checkbox"> {{ line }}</label></li>{% endfor %}</ul>
+      {% else %}<p class="muted">Inga ingredienser angivna.</p>{% endif %}
+    </section>
+    <section>
+      <h2>Gör så</h2>
+      {% if recipe.step_list %}
+      <ol class="steps">{% for step in recipe.step_list %}<li>{{ step }}</li>{% endfor %}</ol>
+      {% else %}<p class="muted">Inga steg angivna.</p>{% endif %}
+    </section>
+  </div>
+
+  <section class="wine">
+    <h2>Vin till</h2>
+    <p class="muted">Vinförslag kommer i nästa version.</p>
+  </section>
+
+  {% if recipe.notes %}<section><h2>Anteckningar</h2><p>{{ recipe.notes|linebreaksbr }}</p></section>{% endif %}
+  {% if recipe.source %}
+  <p class="muted">Källa:
+    {% if recipe.source|slice:":4" == "http" %}<a href="{{ recipe.source }}" rel="noopener" target="_blank">{{ recipe.source }}</a>{% else %}{{ recipe.source }}{% endif %}
+  </p>
+  {% endif %}
+
+  <footer>
+    <a href="{% url 'recipes:edit' recipe.pk %}" role="button" class="secondary">Ändra</a>
+    <a href="{% url 'recipes:delete' recipe.pk %}" role="button" class="outline contrast">Ta bort</a>
+  </footer>
+</article>
+{% endblock %}
